@@ -1,0 +1,49 @@
+<launch>
+
+  <!-- Start your nodes here -->
+  
+  <!-- Launch your other nodes here -->
+
+
+  <!-- Start OctoMap server -->
+  <node name="octomap_server" pkg="octomap_server" type="octomap_server_node" output="screen">
+    <param name="frame_id" value="map"/>
+    <remap from="cloud_in" to="red/camera/depth_registered/points"/>
+    <param name="robot_description" value="red/robot_description"/>
+    <param name="octree_res" value="0.05"/>
+    <param name="publish_free_space" value="true"/>
+    <param name="sensor_model_min" value="20"/>
+    <param name="sensor_model_max_range" value="5"/>
+    <param name="compressed" value="false"/>
+  </node>
+
+  <!-- Start RTAB-Map 
+  <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen">
+    <param name="frame_id" value="map"/>
+    <param name="database_path" value="$(find rtabmap_ros)/../../../data/rtabmap.db"/>
+    <param name="publish_tf" value="true"/>
+    <param name="use_octomap" value="true"/>
+    <param name="octomap_resolution" value="0.05"/>
+  </node>-->
+
+
+  <!-- Start RViz -->
+  <!--Original config file was $(find octomap_server)/rviz/octomap.rviz-->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d /home/jarren/uav_ws/src/icuas23_competition/testDefault.rviz" output="screen"> <!--added output = "screen"-->
+    <remap from="frame_id" to="map"/>
+    
+  </node>
+
+  <!-- Start the MoveIt! Planning Scene Adapter 
+  <node name="planning_scene_octomap" pkg="moveit_ros_perception" type="octomap_server_node" args="planning_scene octomap_binary:=octomap_server/octomap_binary"/>-->
+
+  <!-- Start the MoveIt! planning pipeline 
+  <include file="/home/jarren/uav_ws/src/config/launch/planning_context.launch">
+    <arg name="load_robot_description" value="true"/>
+  </include>-->
+  
+
+
+
+
+</launch>
